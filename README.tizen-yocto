@@ -1,0 +1,91 @@
+Updated 13 August 2015 (mats)
+
+This layer builds the iotivity code base. It is set up for
+the current 0.9.2 tarball, as can be seen in the recipe
+./recipes-core/iotivity/iotivity_0.9.2.bb
+
+This started with the yocto recipe.  That seemed a good idea, but...
+it turns out the current iotivity build files (scons) special-cases a
+target os of 'yocto', doing some magic with the build environment special
+to a yocto/bitbake style build, before changing the target os to 'linux'.
+Meanwhile, the iotivity code also special-cases a target os of 'tizen'.
+Setting it to tizen got the cross build all wrong, and setting it
+to yocto fails to pick up the specifics for tizen (plus the build
+is still done somewhat wrong).
+
+Fixes to this are in the SCons* files where needed. Some of
+them are hacks kind of out of our immediate control: in the
+build_common/tizen/SConscript, the build tools are fished out of the
+environment and set into the construction environment, overriding the
+ones scons would otherwise figure out.  Somewhat unfortunately, instead
+of having this in the environment from bitbake:
+
+CC=arm-oe-linux-gnueabi-gcc
+
+which would be perfectly reasonable if we then figure out the 
+path to those binaries (this is the technique used in build_common/SConscript
+for the yocto target case), but instead we have a whole bunch of
+required options in CC as well, as in:
+
+CC=ccache arm-oe-linux-gnueabi-gcc  -march=armv7-a -marm -mthumb-interwork -mfloat-abi=hard -mfpu=neon-vfpv4 -mtune=cortex-a7 --sysroot=/home/m.wichmann/tizen-distro/build/tmp-glibc/sysroots/raspberrypi2
+
+The former is the name of the binary to use for cc, the latter is a
+full command line - and with the use of ccache (which we could of
+course disable in the overall yocto-tizen build) the "first word"
+algorithm in the script just mentioned fails, because it's not even the
+cross-compiler.
+
+This is not an unsolvable problem, but I just wanted to get the thing
+building. Later.
+
+Another problem hacked around is that with the yocto-style build
+everything is in a sysroot. And when the ioctivity scons recipes try to
+figure out paths to things, they use pkg-config and parse that with an
+scons routine which, in common with the overall philosophy of scons,
+ignores the environment with which scons itself is called. Which just
+happened to contain the PKG_CONFIG* environment variables that let the
+right pkg-config answers be found. iotivity just drops back to the
+system paths, and when things involve tizen specifics that don't exist
+in the host, it goes badly.
+
+
+Building:
+
+the previous effort has been cleaned up, the recipe now grabs the
+tinycbor library as part of setup so this doesn't have to be done
+manually, and patches what needs patching.
+
+Two souce files are patched, they were written against current (2.3)
+tizen but the 3.0-Q1-2015 yocto recipes have not ported forward the
+latest "C API" (capi) packages, so we have a problem with a renamed
+header file. The build now only specifies an IP transport, for a similar
+reason: some of the bluetooth functions used in the code if BT is
+enabled (as it was with the former setting of ALL) do not exist in our
+tizen - these two problems would presumably not be encountered by the
+gbs build.
+
+Looking through the run.do_compile file (a symbolic link to the most
+recent instance), we can see the whole setup it has ready before running
+scons_do_compile(), which is this in my case:
+
+Just add this tree (meta-oic) under tizen-distro and plug it in to the
+build/bblayers.conf file in BBLAYERS. If any previous efforts to build
+the earlier version have been made, get bitbake to clean up any mess in
+its caches of what has gone before - "bitbake -c clean iotivity".
+
+
+Packaging:
+
+I tried to match up the list of files copied over to the locations
+from which they will be then be packaged, because the "install" step
+was failing.  Turns out a lot of the files that were expected by
+the original recipe have not been built, this has not been investigated.
+Some were done differently - libconnectivity_abstraction is intentionally
+built as a .so instead of as a .a in the iotivity code if the target is
+tizen, while as a .a if the target is linux.  The changes made in the
+.bb file were purely reactive - things were commented out if they
+were not present in the finished build, or in cases such as the one
+noted, adjusted to match reality.  Since this leaves out lots and lots
+of sample apps, we should figure out what the story is to move forward.
+
+
