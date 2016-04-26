@@ -1,0 +1,40 @@
+From ed91cb185d9363c100d7e7416ebd237d18d82877 Mon Sep 17 00:00:00 2001
+From: Philippe Coval <philippe.coval@osg.samsung.com>
+Date: Tue, 26 Apr 2016 15:28:17 +0200
+Subject: [PATCH] [Resource-container] Backported init fix to 1.1-rel
+
+[Resource-container] Fix member var initialization
+
+Incorrect type was used causing build error.
+
+Origin: 6a10062f1fe64ca75ac6d34541bbd295ef052dcb
+Author: Inga Stotland <inga.stotland@intel.com>
+Change-Id: I701096c3b6512546847cf4e120430f690e920453
+Signed-off-by: Inga Stotland <inga.stotland@intel.com>
+Reviewed-on: https://gerrit.iotivity.org/gerrit/7759
+Tested-by: jenkins-iotivity <jenkins-iotivity@opendaylight.org>
+Reviewed-by: George Nash <george.nash@intel.com>
+Reviewed-by: Markus Jung <markus.jung85@gmail.com>
+Reviewed-by: Uze Choi <uzchoi@samsung.com>
+Signed-off-by: Philippe Coval <philippe.coval@osg.samsung.com>
+---
+ service/resource-container/src/BundleInfoInternal.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/service/resource-container/src/BundleInfoInternal.cpp b/service/resource-container/src/BundleInfoInternal.cpp
+index a15ae9c..893db00 100644
+--- a/service/resource-container/src/BundleInfoInternal.cpp
++++ b/service/resource-container/src/BundleInfoInternal.cpp
+@@ -32,8 +32,8 @@ namespace OIC
+             m_resourceCreator = nullptr;
+             m_resourceDestroyer = nullptr;
+             m_bundleHandle = nullptr;
+-            m_so_bundle = nullptr;
+ 
++            m_so_bundle = false;
+             m_loaded = false;
+             m_activated = false;
+             m_java_bundle = false;
+-- 
+1.9.1
+
