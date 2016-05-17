@@ -6,25 +6,23 @@ EXTRANATIVEPATH += "chrpath-native"
 SECTION = "libs"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://resource/include/OCApi.h;beginline=1;endline=19;md5=fc5a615cf1dc3880967127bc853b3e0c"
-SRC_URI = "https://github.com/iotivity/iotivity/archive/master.zip;name=iotivity \
+SRCREV = "master"
+SRC_URI = "git://github.com/TizenTeam/iotivity.git;protocol=http;nobranch=1 \
            git://github.com/01org/tinycbor.git;protocol=https;name=cbor;destsuffix=${S}/extlibs/tinycbor/tinycbor \
            https://googletest.googlecode.com/files/gtest-1.7.0.zip;name=gtest \
            https://github.com/dascandy/hippomocks/archive/2f40aa11e31499432283b67f9d3449a3cd7b9c4d.zip \
            http://www.sqlite.org/2015/sqlite-amalgamation-3081101.zip;name=sqlite3 \
-           file://arch.patch;patch=1 \
-           file://yocto_paths.patch;patch=1 \
-           file://hippomocks_mips_patch \
-           file://gcc5.patch \
           "
-SRC_URI[iotivity.md5sum] = "98f8d5b0304c357520c4343d983491e2"
-SRC_URI[iotivity.sha256sum] = "1ec4ae706d1acebfc267802ce1a4855bb2041875d0ae391429d5129dfaa7a216"
-SRCREV_cbor = "b80318ab0640efa98147836380c7937a59dc327d"
-SRC_URI[gtest.md5sum] = "2d6ec8ccdf5c46b05ba54a9fd1d130d7"
-SRC_URI[gtest.sha256sum] = "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d"
-SRC_URI[md5sum] = "d54eb32ea45d6d2b624c87e117f6c0cf"
-SRC_URI[sha256sum] = "0f57fa8cc1e2f76f1769891a266f2715295baf2333d504f628c674767646ac48"
-SRC_URI[sqlite3.md5sum] = "94907e831502e2080b76e281cfa24dde"
-SRC_URI[sqlite3.sha256sum] = "a3b0c07d1398d60ae9d21c2cc7f9be6b1bc5b0168cd94c321ede9a0fce2b3cd7"
+
+#SRC_URI[iotivity.md5sum] = "98f8d5b0304c357520c4343d983491e2"
+#SRC_URI[iotivity.sha256sum] = "1ec4ae706d1acebfc267802ce1a4855bb2041875d0ae391429d5129dfaa7a216"
+#SRCREV_cbor = "b80318ab0640efa98147836380c7937a59dc327d"
+#SRC_URI[gtest.md5sum] = "2d6ec8ccdf5c46b05ba54a9fd1d130d7"
+#SRC_URI[gtest.sha256sum] = "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d"
+#SRC_URI[md5sum] = "d54eb32ea45d6d2b624c87e117f6c0cf"
+#SRC_URI[sha256sum] = "0f57fa8cc1e2f76f1769891a266f2715295baf2333d504f628c674767646ac48"
+#SRC_URI[sqlite3.md5sum] = "94907e831502e2080b76e281cfa24dde"
+#SRC_URI[sqlite3.sha256sum] = "a3b0c07d1398d60ae9d21c2cc7f9be6b1bc5b0168cd94c321ede9a0fce2b3cd7"
 
 inherit scons
 
