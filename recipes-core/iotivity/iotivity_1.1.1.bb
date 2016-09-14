@@ -42,7 +42,7 @@ python () {
     EXTRA_OESCONS += " ROUTING=GW"
     EXTRA_OESCONS += " VERBOSE=1"
     # Enable security here or elsewhere but should be in this "=1" form:
-    # EXTRA_OESCONS += " SECURED=1"
+    EXTRA_OESCONS += " SECURED=1"
     EXTRA_OESCONS += " WITH_RD=1"
     d.setVar("EXTRA_OESCONS", EXTRA_OESCONS)
 }
