@@ -370,6 +370,8 @@ do_install() {
     copy_file ${S}/resource/c_common/platform_features.h ${D}${includedir}/iotivity/resource
     copy_file ${S}/resource/c_common/platform_features.h ${D}${includedir}/iotivity/resource/stack
     copy_file ${S}/resource/c_common/iotivity_config.h ${D}${includedir}/iotivity/resource
+    make_dir ${D}${includedir}/tinycbor
+    install -c -m 444  ${S}/extlibs/tinycbor/tinycbor/src/*.h   ${D}${includedir}/tinycbor
 
     #Adapt unaligned pkconfig (transitionnal)
     sed -e 's|^prefix=.*|prefix=/usr|g' -i ${S}/iotivity.pc
