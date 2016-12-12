@@ -1,3 +1,4 @@
+PR = "r2"
 SUMMARY = "IoTivity framework and SDK sponsored by the Open Connectivity Foundation."
 DESCRIPTION = "IoTivity is an open source software framework enabling seamless device-to-device connectivity to address the emerging needs of the Internet of Things."
 HOMEPAGE = "https://www.iotivity.org/"
@@ -371,7 +372,7 @@ do_install() {
     copy_file ${S}/resource/c_common/platform_features.h ${D}${includedir}/iotivity/resource/stack
     copy_file ${S}/resource/c_common/iotivity_config.h ${D}${includedir}/iotivity/resource
     make_dir ${D}${includedir}/tinycbor
-    install -c -m 444  ${S}/extlibs/tinycbor/tinycbor/src/*.h   ${D}${includedir}/tinycbor
+    install -c -m 444  ${S}/extlibs/tinycbor/tinycbor/src/*.h   ${D}${includedir}/tinycbor/.. #TODO
 
     #Adapt unaligned pkconfig (transitionnal)
     sed -e 's|^prefix=.*|prefix=/usr|g' -i ${S}/iotivity.pc
